@@ -1,27 +1,22 @@
 package main
 
 import (
-	"context"
-	"database/sql"
 	"net/http"
 
 	"github.com/Melidee/goth-chat/handler"
 	"github.com/Melidee/goth-chat/model"
+	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo/v4"
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/sqlitedialect"
-	"github.com/uptrace/bun/driver/sqliteshim"
-	"github.com/uptrace/bun/extra/bundebug"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
 	app := echo.New()
-	db, err := initDB("file::memory:?cache=shared")
+	db, err := sqlx.Connect("sqlite3", "file::memory:?cache=shared")
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
-
-	fillDB(context.Background(), db)
+	fillDB(db)
 
 	app.Static("/assets", "public/assets")
 
@@ -31,21 +26,38 @@ func main() {
 
 	userHandler := handler.UsersHandler{DB: db}
 	app.GET("/users", userHandler.HandleUsersShow)
+
+	authHandler := handler.AuthHandler{DB: db}
+	app.GET("/login", authHandler.LoginShow)
+	app.POST("/login", authHandler.LoginPost)
+
 	app.Logger.Fatal(app.Start(":8080"))
 }
 
-// dbFile `file::memory:?cache=shared` for in memory database
-func initDB(dbFile string) (*bun.DB, error) {
-	sqldb, err := sql.Open(sqliteshim.ShimName, dbFile)
-	if err != nil {
-		return nil, err
+func fillDB(db *sqlx.DB) {
+	schema := `
+	CREATE TABLE Users (
+		id 				INTEGER PRIMARY KEY AUTOINCREMENT,
+		name 			TEXT,
+		profilePicture 	TEXT,
+		email 			TEXT NOT NULL UNIQUE,
+		passwordHash 		TEXT NOT NULL
+	);
+	`
+	db.MustExec(schema)
+	users := []model.User{
+		{
+			Name:           "Amelia",
+			ProfilePicture: "/assets/default.webp",
+			Email:          "amelia@example.com",
+			PasswordHash:   "$argon2id$v=19$m=65536,t=1,p=12$oKcFeeeCLbJ+MJkLE21lAg$BREuFcbA/AVS2KFwxlqXcE90sJ8fuDbsxRaq96UGQXI",
+		},
 	}
-	db := bun.NewDB(sqldb, sqlitedialect.New())
-	db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true), bundebug.FromEnv("BUNDEBUG")))
-	return db, nil
-}
-
-func fillDB(ctx context.Context, db *bun.DB) {
-	db.NewCreateTable().Model((*model.User)(nil)).Exec(ctx)
-	db.NewInsert().Model(&[]model.User{{Name: "Amelia", ProfilePicture: "/assets/default.webp", Email: "amelia@example.com", Username: "meli", PasswordHash: "$2a$10$FlaqHRKfzsprw79tqIJNuOyXIljFZNF.NivRy7WNZpwpMINoKNBzm"}}).Exec(ctx)
+	tx := db.MustBegin()
+	for _, user := range users {
+		tx.NamedExec(`
+			INSERT INTO users  (name, profilePicture, email, password) 
+			VALUES (:name, :profilePicture, :email, :passwordHash)
+		`, user)
+	}
 }

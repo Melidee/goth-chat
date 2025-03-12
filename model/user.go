@@ -1,14 +1,9 @@
 package model
 
-import "github.com/uptrace/bun"
-
 type User struct {
-	bun.BaseModel `bun:"table:users,alias:u"`
-
-	ID int64 `bun:",pk,autoincrement"`
-	Name string
-	ProfilePicture string
-	Email string
-	Username string
-	PasswordHash string
+	ID int64 `db:id`
+	Name string `db:name`
+	ProfilePicture string `db:profilePicture`
+	Email string `db:email`
+	PasswordHash string `db:passwordHash`
 }
