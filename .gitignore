@@ -29,3 +29,6 @@ tmp/
 
 # build directory
 bin/
+
+# sqlite databases
+*.db
