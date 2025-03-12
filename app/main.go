@@ -23,6 +23,8 @@ func main() {
 
 	fillDB(context.Background(), db)
 
+	app.Static("/assets", "public/assets")
+
 	app.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
