@@ -1,0 +1,15 @@
+package components
+
+import "github.com/Melidee/goth-chat/model"
+
+templ Card(user model.User) {
+    <div>
+        <img src={user.ProfilePicture}/>
+        <div>
+            <h3>{user.Name}</h3>
+            <h5>{user.Email}</h5>
+            <h5>{user.Username}</h5>
+            <h5>{user.PasswordHash}</h5>
+        </div>
+    </div>
+}

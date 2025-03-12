@@ -1,9 +1,10 @@
 package user
 
 import "github.com/Melidee/goth-chat/view/layout"
+import "github.com/Melidee/goth-chat/model"
 
-templ Show() {
+templ Show(user model.User) {
     @layout.Base() {
-        <h1>Hello from the user page</h1>
+        <h1>Hello {user.Email} from the user page</h1>
     }
 }
