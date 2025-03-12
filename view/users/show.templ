@@ -1,0 +1,13 @@
+package users
+
+import "github.com/Melidee/goth-chat/view/layout"
+import "github.com/Melidee/goth-chat/model"
+import "github.com/Melidee/goth-chat/view/components"
+
+templ Show(users []model.User) {
+    @layout.Base() {
+        for _, user := range users {
+            @components.Card(user)
+        }
+    }
+}

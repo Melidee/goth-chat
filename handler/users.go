@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/Melidee/goth-chat/model"
-	"github.com/Melidee/goth-chat/view/user"
+	"github.com/Melidee/goth-chat/view/users"
 	"github.com/labstack/echo/v4"
 	"github.com/uptrace/bun"
 )
@@ -14,7 +14,7 @@ type UsersHandler struct {
 }
 
 func (h UsersHandler) HandleUsersShow(c echo.Context) error {
-	u := new(model.User)
-	h.DB.NewSelect().Model(u).Limit(1).Scan(context.Background())
-	return render(c, user.Show(*u))
+	var u []model.User
+	h.DB.NewSelect().Model(&u).Scan(context.Background())
+	return render(c, users.Show(u))
 }
