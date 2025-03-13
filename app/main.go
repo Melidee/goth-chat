@@ -12,7 +12,7 @@ import (
 
 func main() {
 	app := echo.New()
-	db, err := sqlx.Connect("sqlite3", "file::memory:?cache=shared")
+	db, err := sqlx.Connect("sqlite3", ":memory:")
 	if err != nil {
 		app.Logger.Fatal(err)
 	}
@@ -41,7 +41,7 @@ func fillDB(db *sqlx.DB) {
 		name 			TEXT,
 		profilePicture 	TEXT,
 		email 			TEXT NOT NULL UNIQUE,
-		passwordHash 		TEXT NOT NULL
+		passwordHash 	TEXT NOT NULL
 	);
 	`
 	db.MustExec(schema)
@@ -55,9 +55,17 @@ func fillDB(db *sqlx.DB) {
 	}
 	tx := db.MustBegin()
 	for _, user := range users {
-		tx.NamedExec(`
-			INSERT INTO users  (name, profilePicture, email, password) 
+		_, _ = tx.NamedExec(`
+			INSERT INTO Users  (name, profilePicture, email, passwordHash) 
 			VALUES (:name, :profilePicture, :email, :passwordHash)
 		`, user)
 	}
+	_ = tx.Commit()
+
+	var usersGet []model.User
+	err := db.Select(&usersGet, "SELECT * FROM Users")
+	if err != nil {
+		panic(err)
+	}
+	println(usersGet)
 }
