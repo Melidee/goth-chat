@@ -30,6 +30,8 @@ func main() {
 	authHandler := handler.AuthHandler{DB: db}
 	app.GET("/login", authHandler.LoginShow)
 	app.POST("/login", authHandler.LoginPost)
+	app.GET("/register", authHandler.RegisterShow)
+	app.POST("/register", authHandler.RegisterPost)
 
 	app.Logger.Fatal(app.Start(":8080"))
 }

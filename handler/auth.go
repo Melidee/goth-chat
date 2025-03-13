@@ -40,9 +40,30 @@ func (h AuthHandler) LoginPost(c echo.Context) error {
 }
 
 func (h AuthHandler) RegisterShow(c echo.Context) error {
-	return nil
+	return render(c, auth.RegisterShow(false))
 }
 
 func (h AuthHandler) RegisterPost(c echo.Context) error {
-	return nil
+	password := c.FormValue("password")
+	hash, err := argon2id.CreateHash(password, argon2id.DefaultParams)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "500 Server Error")
+	}
+	newUser := model.User{
+		Name:           c.FormValue("name"),
+		ProfilePicture: "/default.webp",
+		Email:          c.FormValue("email"),
+		PasswordHash:   hash,
+	}
+
+	tx, err := h.DB.Beginx()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "500 Server Error")
+	}
+	tx.NamedExec(`
+		INSERT INTO Users  (name, profilePicture, email, passwordHash) 
+		VALUES (:name, :profilePicture, :email, :passwordHash)
+	`, newUser)
+	tx.Commit()
+	return c.Redirect(http.StatusSeeOther, "/")
 }

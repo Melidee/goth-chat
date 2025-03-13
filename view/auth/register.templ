@@ -1,0 +1,17 @@
+package auth
+
+templ RegisterShow(unsuccessful bool) {
+    <h1>Register</h1>
+    <form action="#" method="post">
+        <label for="name">Name</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="email">Email</label><br>
+        <input type="text" id="email" name="email"><br>
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password"><br>
+        if unsuccessful {
+            <p>unsuccessful</p>
+        }
+        <input type="submit">
+    </form>
+}
