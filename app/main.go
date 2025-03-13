@@ -37,16 +37,7 @@ func main() {
 }
 
 func fillDB(db *sqlx.DB) {
-	schema := `
-	CREATE TABLE Users (
-		id 				INTEGER PRIMARY KEY AUTOINCREMENT,
-		name 			TEXT,
-		profilePicture 	TEXT,
-		email 			TEXT NOT NULL UNIQUE,
-		passwordHash 	TEXT NOT NULL
-	);
-	`
-	db.MustExec(schema)
+	db.MustExec(model.UserSchema())
 	users := []model.User{
 		{
 			Name:           "Amelia",
