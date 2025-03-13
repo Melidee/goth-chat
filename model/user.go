@@ -22,8 +22,8 @@ func UserSchema() string {
 	`
 }
 
-func (u User) Chats(db *sqlx.DB) ([]Chat, error) {
-	var chats []Chat
+func (u User) Chats(db *sqlx.DB) ([]DirectChat, error) {
+	var chats []DirectChat
 	err := db.Select(chats, `SELECT * FROM Users JOIN ChatUserJunctions USING (chat)`)
 	return chats, err
 }

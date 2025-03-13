@@ -40,73 +40,35 @@ func fillDB(db *sqlx.DB) {
 	db.MustExec(model.UserSchema())
 	db.MustExec(model.MessageSchema())
 	db.MustExec(model.ChatSchema())
-	db.MustExec(model.ChatUserSchema())
 	db.MustExec(model.ChatMessageSchema())
 	users := []model.User{
 		{
-			ID: 1,
+			ID:             1,
 			Name:           "Amelia",
 			ProfilePicture: "/assets/default.webp",
 			Email:          "amelia@example.com",
 			PasswordHash:   "$argon2id$v=19$m=65536,t=1,p=12$oKcFeeeCLbJ+MJkLE21lAg$BREuFcbA/AVS2KFwxlqXcE90sJ8fuDbsxRaq96UGQXI",
 		},
 		{
-			ID: 2,
+			ID:             2,
 			Name:           "Drew",
 			ProfilePicture: "/assets/default.webp",
 			Email:          "drew@example.com",
 			PasswordHash:   "$argon2id$v=19$m=65536,t=1,p=12$oKcFeeeCLbJ+MJkLE21lAg$BREuFcbA/AVS2KFwxlqXcE90sJ8fuDbsxRaq96UGQXI",
 		},
 	}
-	chats := []model.Chat{
-		{
-			ID: 1,
-			Name: "this chat",
-		},
+	chats := []model.DirectChat{
+		{ID: 1, Name: "this chat", UserA: 1, UserB: 2},
 	}
 	messages := []model.Message{
-		{
-			ID: 1,
-			Author: 1,
-			Body: "Hello, world!",
-			Media: "",
-		},
-		{
-			ID: 2,
-			Author: 1,
-			Body: "Hello, again!",
-			Media: "",
-		},
-		{
-			ID: 3,
-			Author: 2,
-			Body: "Hello, friend!",
-			Media: "",
-		},
-	}
-	chatUserJunctions := []model.ChatUser{
-		{
-			User: 1,
-			Chat: 1,
-		},
-		{
-			User: 2,
-			Chat: 1,
-		},
+		{ID: 1, Author: 1, Body: "Hello, world!", Media: ""},
+		{ID: 2, Author: 1, Body: "Hello, again!", Media: ""},
+		{ID: 3, Author: 2, Body: "Hello, friend!", Media: ""},
 	}
 	chatMessageJunctions := []model.ChatMessage{
-		{
-			Message: 1,
-			Chat: 1,
-		},
-		{
-			Message: 2,
-			Chat: 1,
-		},
-		{
-			Message: 3,
-			Chat: 1,
-		},
+		{Message: 1, Chat: 1},
+		{Message: 2, Chat: 1},
+		{Message: 3, Chat: 1},
 	}
 	tx := db.MustBegin()
 	for _, user := range users {
@@ -126,12 +88,6 @@ func fillDB(db *sqlx.DB) {
 			INSERT INTO Messages (id, author, body, media) 
 			VALUES (:id, :author, :body, :media);
 		`, message)
-	}
-	for _, junction := range chatUserJunctions {
-		_, _ = tx.NamedExec(`
-			INSERT INTO ChatUserJunctions (user, chat) 
-			VALUES (:user, :chat);
-		`, junction)
 	}
 	for _, junction := range chatMessageJunctions {
 		_, _ = tx.NamedExec(`
