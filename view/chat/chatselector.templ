@@ -1,0 +1,15 @@
+package chat
+
+import "github.com/Melidee/goth-chat/model"
+
+templ ChatSelector(chats []model.DirectChat) {
+    <div>
+        for _, chat := range chats {
+            @chatButton(chat)
+        }
+    </div>
+}
+
+templ chatButton(chat model.DirectChat) {
+    <h3>{chat.Name}</h3>
+}
