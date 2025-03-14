@@ -9,7 +9,7 @@ run: build-app
 	@./bin/app
 
 dev: 
-	air
+	@air --build.cmd "rm ./sqlite3.db; templ generate; go build -o bin/app ./app/" --build.bin "./bin/app"
 
 clean: 
 	@rm -rf bin
