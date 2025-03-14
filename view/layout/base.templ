@@ -1,13 +1,13 @@
 package layout
 
 templ Base() {
-    <html>
+    <!DOCTYPE html>
+    <html class="w-screen h-screen">
         <head>
             <link rel="stylesheet" href="/assets/app.css"/>
         </head>
-        <body>
-        <h1>Hello from the base</h1>
-        { children... }
+        <body class="w-full h-full">
+            { children... }
         </body>
     </html>
 }

@@ -1,7 +1,23 @@
 package chat
 
 import "github.com/Melidee/goth-chat/model"
+import "github.com/Melidee/goth-chat/view/layout"
 
-templ Chat(chats []model.DirectChat) {
-    @ChatSelector(chats)
+templ Show(currentUser model.User, chats []model.User) {
+    @layout.Base() {
+        <div class="flex p-6 w-full h-full bg-neutral-900">
+            <div class="flex flex-col h-full">
+                @chatSelector(chats)
+                @userInfo(currentUser)
+            </div>
+            
+        </div>
+    }
+}
+
+templ userInfo(user model.User) {
+    <div class="w-xs h-20 mt-6 rounded-xl flex-row bg-rose-400">
+        <img src={user.ProfilePicture} alt="" class="w-12 y-12 rounded-full">
+        <h3>{user.Name}</h3>
+    </div>
 }

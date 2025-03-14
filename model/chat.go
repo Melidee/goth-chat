@@ -17,8 +17,8 @@ func ChatSchema() string {
 	return `
 	CREATE TABLE DirectChats (
 		id 		INTEGER PRIMARY KEY AUTOINCREMENT,
-		name 	TEXT NOT NULL
-		userA   INTEGER
+		name 	TEXT NOT NULL,
+		userA   INTEGER,
 		userB	INTEGER
 	);
 	`

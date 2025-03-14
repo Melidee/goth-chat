@@ -24,6 +24,9 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
+	chatHandler := handler.ChatHandler{DB: db}
+	app.GET("/chat", chatHandler.ChatShow)
+
 	userHandler := handler.UsersHandler{DB: db}
 	app.GET("/users", userHandler.HandleUsersShow)
 

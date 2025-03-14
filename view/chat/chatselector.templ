@@ -2,14 +2,17 @@ package chat
 
 import "github.com/Melidee/goth-chat/model"
 
-templ ChatSelector(chats []model.DirectChat) {
-    <div>
+templ chatSelector(chats []model.User) {
+    <div class="w-xs bg-gradient-to-b from-rose-600 to-rose-50 flex flex-col grow rounded-xl">
         for _, chat := range chats {
             @chatButton(chat)
         }
     </div>
 }
 
-templ chatButton(chat model.DirectChat) {
-    <h3>{chat.Name}</h3>
+templ chatButton(chat model.User) {
+    <button type="button" class="flex flex-row h-12 m-1.5 p-1 rounded-full bg-neutral-800 hover:bg-neutral-700">
+        <img src={chat.ProfilePicture} alt="Profile picture" class="flex h-10 rounded-full">
+        <h3 class="flex left-16 ml-3 mt-1 text-xl text-white">{chat.Name}</h3>
+    </button>   
 }
