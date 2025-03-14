@@ -43,10 +43,10 @@ func (c DirectChat) Friend(db sqlx.DB, u User) (*User, error) {
 	return nil, fmt.Errorf("user %s is not a member of this chat", u.Email)
 }
 
-func (c DirectChat) Messages(db sqlx.DB) ([]User, error) {
-	var members []User
-	err := db.Select(members, `SELECT * FROM Messages JOIN ChatMessageJunctions USING (message)`)
-	return members, err
+func (c DirectChat) Messages(db *sqlx.DB) ([]Message, error) {
+	var messages []Message
+	err := db.Select(&messages, `SELECT * FROM Messages WHERE chat=$1`, c.ID)
+	return messages, err
 }
 
 type ChatMessage struct {

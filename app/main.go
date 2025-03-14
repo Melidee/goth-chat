@@ -64,9 +64,9 @@ func fillDB(db *sqlx.DB) {
 		{ID: 1, Name: "this chat", UserA: 1, UserB: 2},
 	}
 	messages := []model.Message{
-		{ID: 1, Author: 1, Body: "Hello, world!", Media: ""},
-		{ID: 2, Author: 1, Body: "Hello, again!", Media: ""},
-		{ID: 3, Author: 2, Body: "Hello, friend!", Media: ""},
+		{ID: 1, Author: 1, Chat: 1, Body: "Hello, world!", Media: ""},
+		{ID: 2, Author: 1, Chat: 1, Body: "Hello, again!", Media: ""},
+		{ID: 3, Author: 2, Chat: 1, Body: "Hello, friend!", Media: ""},
 	}
 	chatMessageJunctions := []model.ChatMessage{
 		{Message: 1, Chat: 1},
@@ -82,14 +82,14 @@ func fillDB(db *sqlx.DB) {
 	}
 	for _, chat := range chats {
 		_, _ = tx.NamedExec(`
-			INSERT INTO Chats (id, name) 
-			VALUES (:id, :name);
+			INSERT INTO DirectChats (id, name, userA, userB) 
+			VALUES (:id, :name, :userA, :userB);
 		`, chat)
 	}
 	for _, message := range messages {
 		_, _ = tx.NamedExec(`
-			INSERT INTO Messages (id, author, body, media) 
-			VALUES (:id, :author, :body, :media);
+			INSERT INTO Messages (id, author, chat, body, media) 
+			VALUES (:id, :author, :chat, :body, :media);
 		`, message)
 	}
 	for _, junction := range chatMessageJunctions {
