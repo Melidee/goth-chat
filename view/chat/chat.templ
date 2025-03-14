@@ -3,21 +3,45 @@ package chat
 import "github.com/Melidee/goth-chat/model"
 import "github.com/Melidee/goth-chat/view/layout"
 
-templ Show(currentUser model.User, chats []model.User) {
+type ChatModel struct {
+    self *ChatUser
+    friend *ChatUser
+    messages []ChatMessage
+}
+
+type ChatUser struct {
+
+}
+
+type ChatMessage struct {
+
+}
+
+templ Show(currentUser model.User, chats []model.User, friend model.User, chatMessages []model.Message) {
     @layout.Base() {
-        <div class="flex p-6 w-full h-full bg-neutral-900">
+        <div class="flex flex-row p-6 w-full h-full bg-neutral-900">
             <div class="flex flex-col h-full">
                 @chatSelector(chats)
                 @userInfo(currentUser)
             </div>
-            
+            <div class="flex flex-col w-full ml-6 ">
+                @chatInfo(friend)
+                @chatBox(chatMessages)
+            </div>
         </div>
     }
 }
 
 templ userInfo(user model.User) {
-    <div class="w-xs h-20 mt-6 rounded-xl flex-row bg-rose-400">
+    <div class="flex flex-row w-xs h-20 mt-6 rounded-xl bg-rose-600">
         <img src={user.ProfilePicture} alt="" class="w-12 y-12 rounded-full">
+        <h3>{user.Name}</h3>
+    </div>
+}
+
+templ chatInfo(user model.User) {
+    <div class="flex flex-row h-14 w-full rounded-xl bg-gradient-to-r from-rose-600 to-rose-50">
+        <img src={user.ProfilePicture} alt="friend profile picture" class="h-10 mt-1 ml-1 rounded-full">
         <h3>{user.Name}</h3>
     </div>
 }

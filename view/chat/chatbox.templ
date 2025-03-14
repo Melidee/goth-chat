@@ -1,5 +1,10 @@
 package chat
 
-templ ChatBox() {
-    
+import "github.com/Melidee/goth-chat/model"
+
+templ chatBox(messages []model.Message) {
+    <div class="flex flex-col w-full h-full mt-6 rounded-xl bg-neutral-800">
+        @messageBox(messages)
+        @inputBox()
+    </div>
 }

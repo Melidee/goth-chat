@@ -1,5 +1,21 @@
 package chat
 
-templ messageBox() {
-    
+import "github.com/Melidee/goth-chat/model"
+
+templ messageBox(messages []model.Message) {
+    <div class="flex w-full h-full">
+        for _, message := range messages {
+            @selfMessage(message)
+        }
+    </div>
 }
+
+templ selfMessage(message model.Message) {
+    <div>
+        <div class="flex-2/3 grow p-1.5 rounded-xl bg-neutral-600">
+            <p class="text-rose-50">{message.Body}</p>
+        </div>
+    </div>
+}
+
+// display size margin padding border color
