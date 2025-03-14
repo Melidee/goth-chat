@@ -29,6 +29,10 @@ func inputBox() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"h-14 m-4 rounded-full bg-gradient-to-r from-rose-600 to-rose-50\"><div class=\"flex flex-row h-12 m-1 rounded-full bg-neutral-800\"><button type=\"button\" class=\"h-8 w-8 ml-2 mt-2 rounded-full bg-rose-200 hover:bg-rose-50\"><img src=\"/assets/icons/plus.svg\" alt=\"upload icon\" class=\"h-6 w-6 ml-1 mt-0.5\"></button> <input type=\"text\" class=\"flex flex-grow h-8 m-2 outline-0 text-rose-50\"></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		return nil
 	})
 }
