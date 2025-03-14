@@ -13,6 +13,17 @@ type ChatHandler struct {
 
 func (h ChatHandler) ChatShow(c echo.Context) error {
 	var users []model.User
-	h.DB.Select(&users, "SELECT * FROM Users")
-	return render(c, chat.Show(users[0], users))
+	err := h.DB.Select(&users, "SELECT * FROM Users")
+	if err != nil {
+		panic(err)
+	}
+	chats, err := users[0].Chats(h.DB)
+	if err != nil {
+		panic(err)
+	}
+	messages, err := chats[0].Messages(h.DB)
+	if err != nil {
+		panic(err)
+	}
+	return render(c, chat.Show(users[0], users, users[1], messages))
 }
